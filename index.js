@@ -2,6 +2,8 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const cors = require('cors')
 const express = require('express')
+const fs = require('fs')
+const { type } = require('os')
 const app = express()
 
 // Middleware cors
@@ -21,15 +23,22 @@ app.get('/exito/:id', (request, response) => {
             const html = res.data
             const $ = cheerio.load(html)
             const articles = []
-            $('div.dib').each(function () {
-                const alt = $(this).find('img').attr('alt')
-                const url = $(this).find('img').attr('src')
-                articles.push({ alt, url })
-                console.log(url);
+            $('[data-varname]').each(function () {
+                // const alt = $(this).attr('alt')
+                // const url = $(this).attr('src')
+                const attributes = $(this).attr()
+                articles.push({ attributes })
             })
-            console.log(articles);
+            console.clear()
+            console.log('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
+            console.log((res));
+            const string = JSON.stringify(res.data)
+            // fs.writeFile('request.html', res.data, (err) => {
+            //     if (err) throw err;
+            //     console.log('The file has been saved!');
+            // })
             response.status(201).json({ search, page, URL, articles })
-        }).catch((err) => console.log(err))
+        }).catch((err) => console.log('hubo un error'))
 })
 
 
