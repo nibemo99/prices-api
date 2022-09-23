@@ -124,6 +124,35 @@ app.get('/alk/:id', (request, response) => {
 
 
 
+// Falabella
+app.get('/fll/:id', (request, response) => {
+    const search = request.params.id
+    const { page } = request.query
+    const URL = (page)
+        ? `https://www.falabella.com.co/falabella-co/search?Ntt=${search}`
+        : `https://www.falabella.com.co/falabella-co/search?Ntt=${search}`
+
+    axios.get(URL)
+        .then((res) => {
+            const html = res.data
+            const $ = cheerio.load(html)
+            let articles = []
+
+            fs.writeFile('falabella.html', res.data, (err) => {
+                if (err) throw err;
+                console.log('The file has been saved!');
+            })
+
+            response.status(200).json({ search, page, URL, articles })
+        })
+        .catch((err) => console.log(err))
+})
+
+
+
+// https://www.falabella.com.co/falabella-co/search?Ntt=computador+asus
+
+
 
 
 
