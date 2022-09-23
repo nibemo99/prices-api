@@ -41,9 +41,12 @@ app.get('/exito/:id', (request, response) => {
                 imageObj = articles[image]
                 const { imageUrl } = imageObj
 
+                const priceObjName = '$' + e + '.priceRange.sellingPrice'
+                console.log(priceObjName)
+                const priceObj = articles[priceObjName]
+                const { highPrice } = priceObj
 
-
-                const tempObj = { productName, brand, link, imageUrl }
+                const tempObj = { productName, brand, link, imageUrl, highPrice }
                 return (tempObj)
             })
             console.clear()
