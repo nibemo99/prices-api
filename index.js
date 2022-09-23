@@ -31,17 +31,17 @@ app.get('/exito/:id', (request, response) => {
             })
             const productsArray = Object.keys(articles).filter(key => key.length <= 18 && key.length >= 15)
             const filtered = productsArray.map(e => {
-                const product = articles[e]
-                const { productName, brand, link } = product
+                const productObj = articles[e]
+                const { productName, brand, link } = productObj
 
                 let image = e + '.items({\"filter\":\"ALL_AVAILABLE\"}).0'
-
                 let imageObj = articles[image]
                 const { images } = imageObj
                 image = images[0].id
-
                 imageObj = articles[image]
-                let { imageUrl } = imageObj
+                const { imageUrl } = imageObj
+
+
 
                 const tempObj = { productName, brand, link, imageUrl }
                 return (tempObj)
