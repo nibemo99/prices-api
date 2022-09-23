@@ -42,11 +42,16 @@ app.get('/exito/:id', (request, response) => {
                 const { imageUrl } = imageObj
 
                 const priceObjName = '$' + e + '.priceRange.sellingPrice'
-                console.log(priceObjName)
                 const priceObj = articles[priceObjName]
                 const { highPrice } = priceObj
 
-                const tempObj = { productName, brand, link, imageUrl, highPrice }
+                const discountObjName = '$' + e + `.items({\"filter\":\"ALL_AVAILABLE\"}).0.sellers.0.commertialOffer.teasers.0.effects.parameters.0`
+                const discountObj = articles[discountObjName]
+                var withDiscount = undefined
+                if (discountObj) {
+                    withDiscount = highPrice * (1 - (Number(discountObj.value)/100))
+                }
+                const tempObj = { productName, brand, link, imageUrl, highPrice, withDiscount }
                 return (tempObj)
             })
             console.clear()
@@ -57,7 +62,7 @@ app.get('/exito/:id', (request, response) => {
             //     console.log('The file has been saved!');
             // })
             response.status(201).json({ search, page, URL, filtered })
-        }).catch((err) => console.log('hubo un error'))
+        }).catch((err) => console.log('hubo un error\n' + err))
 })
 
 
