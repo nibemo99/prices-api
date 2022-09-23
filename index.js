@@ -43,11 +43,11 @@ app.get('/exito/:id', (request, response) => {
 
                 const priceObjName = '$' + e + '.items({\"filter\":\"ALL_AVAILABLE\"}).0.sellers.0.commertialOffer'
                 const priceObj = articles[priceObjName]
-                const { spotPrice } = priceObj
+                let { spotPrice } = priceObj
 
                 const lowPriceObjName = '$' + e + '.priceRange.sellingPrice'
                 const lowPriceObj = articles[lowPriceObjName]
-                const { lowPrice } = lowPriceObj
+                let { lowPrice } = lowPriceObj
 
                 const discountObjName = '$' + e + `.items({\"filter\":\"ALL_AVAILABLE\"}).0.sellers.0.commertialOffer.teasers.0.effects.parameters.0`
                 const discountObj = articles[discountObjName]
@@ -57,12 +57,20 @@ app.get('/exito/:id', (request, response) => {
                 }
 
                 var basePrice = undefined
-                if (spotPrice < lowPrice) {
-                    basePrice = spotPrice
-                } else {
+                if (lowPrice > 100000) {
                     basePrice = lowPrice
+                } else {
+                    basePrice = spotPrice
                 }
-                const tempObj = { productName, brand, link, imageUrl, basePrice, withDiscount }
+                if (lowPrice >= spotPrice) {
+                    if (lowPrice > 100000) {
+                        spotPrice = lowPrice
+                        lowPrice = undefined
+                    } else {
+                        lowPrice = undefined
+                    }
+                }
+                const tempObj = { productName, brand, link, imageUrl, lowPrice, spotPrice, withDiscount }
                 return (tempObj)
             })
             console.clear()
