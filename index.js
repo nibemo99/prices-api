@@ -1,9 +1,10 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const { log } = require('console')
 const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
-const { type } = require('os')
+const { type, arch } = require('os')
 const app = express()
 
 // Middleware cors
@@ -32,7 +33,18 @@ app.get('/exito/:id', (request, response) => {
             const filtered = productsArray.map(e => {
                 const product = articles[e]
                 const { productName, brand, link } = product
-                return ({ productName, brand, link })
+
+                let image = e + '.items({\"filter\":\"ALL_AVAILABLE\"}).0'
+
+                let imageObj = articles[image]
+                const { images } = imageObj
+                image = images[0].id
+
+                imageObj = articles[image]
+                let { imageUrl } = imageObj
+
+                const tempObj = { productName, brand, link, imageUrl }
+                return (tempObj)
             })
             console.clear()
             console.log('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
