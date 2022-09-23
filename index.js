@@ -84,7 +84,7 @@ app.get('/exito/:id', (request, response) => {
             // })
             response.status(200).json({ searchParsed, page, URL, filtered })
         })
-        .catch((err) => console.log('hubo un error\n' + err))
+        .catch((err) => console.log(err))
 })
 
 
@@ -112,20 +112,13 @@ app.get('/alk/:id', (request, response) => {
                 const oldPrice = $(this).find('.product__price--discounts__old').text().trim()
                 const todayPrice = $(this).find('.price').text().trim()
                 const otherPrice = $(this).find('.price-contentPlp').children().first().text().trim()
-                console.log('1', oldPrice, '*')
-                console.log('2', todayPrice, '*')
-                console.log('3', otherPrice, '*')
 
                 const product = { title, href, image, oldPrice, todayPrice, otherPrice }
                 articles.push({ ...product })
             })
-
             response.status(200).json({ search, page, URL, articles })
         })
-        .catch((err) => console.log('hubo un error\n' + err))
-
-
-
+        .catch((err) => console.log(err))
 })
 
 
