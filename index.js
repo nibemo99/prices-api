@@ -12,10 +12,10 @@ app.use(cors())
 
 
 
-// EXITO
+// Éxito
 app.get('/exito/:id', (request, response) => {
     const search = request.params.id
-    const searchParsed = search.replaceAll(' ','%20')
+    const searchParsed = search.replaceAll(' ', '%20')
     const { page } = request.query
     const URL = (page)
         ? `https://www.exito.com/${searchParsed}?_q=${searchParsed}&map=ft&page=${page}`
@@ -82,12 +82,40 @@ app.get('/exito/:id', (request, response) => {
             //     if (err) throw err;
             //     console.log('The file has been saved!');
             // })
-            response.status(201).json({ searchParsed, page, URL, filtered })
-        }).catch((err) => console.log('hubo un error\n' + err))
+            response.status(200).json({ searchParsed, page, URL, filtered })
+        })
+        .catch((err) => console.log('hubo un error\n' + err))
 })
 
 
 
+// Alkosto
+app.get('/alk/:id', (request, response) => {
+    const search = request.params.id
+    const { page } = request.query
+    const URL = (page)
+        ? `https://www.alkosto.com/search/?text=${search}&page=${page}&pageSize=25&sort=relevance`
+        : `https://www.alkosto.com/search/?text=${search}`
+
+    axios.get(URL)
+        .then((res) => {
+            const html = res.data
+            const $ = cheerio.load(html)
+            let articles = {}
+
+            const fileToSave = JSON.stringify(articles)
+            fs.writeFile('res-data.html', res.data, (err) => {
+                if (err) throw err;
+                console.log('The file has been saved!');
+            })
+
+            response.status(200).json({ search, page, URL })
+        })
+        .catch((err) => console.log('hubo un error\n' + err))
+
+
+
+})
 
 
 
