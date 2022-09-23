@@ -15,10 +15,11 @@ app.use(cors())
 // EXITO
 app.get('/exito/:id', (request, response) => {
     const search = request.params.id
+    const searchParsed = search.replaceAll(' ','%20')
     const { page } = request.query
     const URL = (page)
-        ? `https://www.exito.com/${search}?_q=${search}&map=ft&page=${page}`
-        : `https://www.exito.com/${search}?_q=${search}&map=ft`
+        ? `https://www.exito.com/${searchParsed}?_q=${searchParsed}&map=ft&page=${page}`
+        : `https://www.exito.com/${searchParsed}?_q=${searchParsed}&map=ft`
     axios.get(URL)
         .then((res) => {
             const html = res.data
@@ -75,15 +76,16 @@ app.get('/exito/:id', (request, response) => {
             })
             console.clear()
             console.log('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
-            const temporal = JSON.stringify(articles)
+            // Code to save the big json files in dev
+            // const temporal = JSON.stringify(articles)
             // fs.writeFile('bug-precio-iphones.json', temporal, (err) => {
             //     if (err) throw err;
             //     console.log('The file has been saved!');
             // })
-            response.status(201).json({ search, page, URL, filtered })
+            response.status(201).json({ searchParsed, page, URL, filtered })
         }).catch((err) => console.log('hubo un error\n' + err))
 })
-// 5306
+
 
 
 
