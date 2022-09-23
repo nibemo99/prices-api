@@ -88,7 +88,6 @@ app.get('/exito/:id', (request, response) => {
 })
 
 
-
 // Alkosto
 app.get('/alk/:id', (request, response) => {
     const search = request.params.id
@@ -120,8 +119,6 @@ app.get('/alk/:id', (request, response) => {
         })
         .catch((err) => console.log(err))
 })
-
-
 
 
 // Falabella
@@ -166,7 +163,7 @@ app.get('/fll/:id', (request, response) => {
 
 
 
-app.listen(8000, () => console.log('running'))
+app.listen()
 
 
 
