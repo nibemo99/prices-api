@@ -138,11 +138,16 @@ app.get('/fll/:id', (request, response) => {
             const $ = cheerio.load(html)
             let articles = []
 
-            fs.writeFile('falabella.html', res.data, (err) => {
-                if (err) throw err;
-                console.log('The file has been saved!');
-            })
+            // $('[data-varname="__STATE__"]').each(function () {
+            //     const element = $(this).attr()
+            //     articles.push({ ...element })
+            // })
 
+            const element = $('[id="__NEXT_DATA__"]').text()
+            const elementParsed = JSON.parse(element)
+            articles = elementParsed.props.pageProps.results
+
+            // type="application/json"
             response.status(200).json({ search, page, URL, articles })
         })
         .catch((err) => console.log(err))
