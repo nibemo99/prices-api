@@ -41,29 +41,43 @@ app.get('/exito/:id', (request, response) => {
                 imageObj = articles[image]
                 const { imageUrl } = imageObj
 
-                const priceObjName = '$' + e + '.priceRange.sellingPrice'
+                const priceObjName = '$' + e + '.items({\"filter\":\"ALL_AVAILABLE\"}).0.sellers.0.commertialOffer'
                 const priceObj = articles[priceObjName]
-                const { highPrice } = priceObj
+                const { spotPrice } = priceObj
+
+                const lowPriceObjName = '$' + e + '.priceRange.sellingPrice'
+                const lowPriceObj = articles[lowPriceObjName]
+                const { lowPrice } = lowPriceObj
 
                 const discountObjName = '$' + e + `.items({\"filter\":\"ALL_AVAILABLE\"}).0.sellers.0.commertialOffer.teasers.0.effects.parameters.0`
                 const discountObj = articles[discountObjName]
                 var withDiscount = undefined
                 if (discountObj) {
-                    withDiscount = highPrice * (1 - (Number(discountObj.value)/100))
+                    withDiscount = spotPrice * (1 - (Number(discountObj.value) / 100))
                 }
-                const tempObj = { productName, brand, link, imageUrl, highPrice, withDiscount }
+
+                var basePrice = undefined
+                if (spotPrice < lowPrice) {
+                    basePrice = spotPrice
+                } else {
+                    basePrice = lowPrice
+                }
+                const tempObj = { productName, brand, link, imageUrl, basePrice, withDiscount }
                 return (tempObj)
             })
             console.clear()
             console.log('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------');
-            // const temporal = JSON.stringify(articles)
-            // fs.writeFile('request.json', temporal, (err) => {
+            const temporal = JSON.stringify(articles)
+            // fs.writeFile('bug-precio-iphones.json', temporal, (err) => {
             //     if (err) throw err;
             //     console.log('The file has been saved!');
             // })
             response.status(201).json({ search, page, URL, filtered })
         }).catch((err) => console.log('hubo un error\n' + err))
 })
+// 5306
+
+
 
 
 
