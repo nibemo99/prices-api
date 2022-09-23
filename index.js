@@ -109,8 +109,14 @@ app.get('/alk/:id', (request, response) => {
 
                 const image = `https://www.alkosto.com${$(this).find('img').attr('data-src')}`
 
+                const oldPrice = $(this).find('.product__price--discounts__old').text().trim()
+                const todayPrice = $(this).find('.price').text().trim()
+                const otherPrice = $(this).find('.price-contentPlp').children().first().text().trim()
+                console.log('1', oldPrice, '*')
+                console.log('2', todayPrice, '*')
+                console.log('3', otherPrice, '*')
 
-                const product = { title, href, image }
+                const product = { title, href, image, oldPrice, todayPrice, otherPrice }
                 articles.push({ ...product })
             })
 
