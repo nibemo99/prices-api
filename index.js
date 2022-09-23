@@ -101,15 +101,20 @@ app.get('/alk/:id', (request, response) => {
         .then((res) => {
             const html = res.data
             const $ = cheerio.load(html)
-            let articles = {}
+            let articles = []
 
-            const fileToSave = JSON.stringify(articles)
-            fs.writeFile('res-data.html', res.data, (err) => {
-                if (err) throw err;
-                console.log('The file has been saved!');
+            $('.product__list--item').each(function () {
+                const href = `https://www.alkosto.com${$(this).find('a.js-product-click-datalayer').attr('href')}`
+                const title = $(this).find('a.js-product-click-datalayer').attr('title')
+
+                const image = `https://www.alkosto.com${$(this).find('img').attr('data-src')}`
+
+
+                const product = { title, href, image }
+                articles.push({ ...product })
             })
 
-            response.status(200).json({ search, page, URL })
+            response.status(200).json({ search, page, URL, articles })
         })
         .catch((err) => console.log('hubo un error\n' + err))
 
